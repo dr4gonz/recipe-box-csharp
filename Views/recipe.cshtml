@@ -16,19 +16,23 @@
           <a href="/categories/@category.GetId()">@category.GetName()</a>
         }
       </p>
-      <form action="/recipes/@Model.GetId()/add-category" method="post">
-        <select name="category">
-          @foreach (var category in Model.GetAvailableCategories())
-          {
-            <option value="@category.GetId()">@category.GetName()</option>
-          }
-        </select>
-        <button type="submit" name="button">Add Category</button>
-      </form>
+      @if(Model.GetAvailableCategories().Count != 0)
+      {
+        <form action="/recipes/@Model.GetId()/add-category" method="post">
+          <select name="category">
+            @foreach (var category in Model.GetAvailableCategories())
+            {
+              <option value="@category.GetId()">@category.GetName()</option>
+            }
+          </select>
+          <button type="submit" name="button">Add Category</button>
+        </form>
+      }
       <form action="/recipes/@Model.GetId()/delete" method="post">
         <input type="hidden" name="_method" value="DELETE">
         <button type="submit" name="button">Delete This Recipe</button>
       </form>
+      <a href="/recipes/update/@Model.GetId()">Edit Recipe</a>
       <a href="/recipes/add">Add a Recipe</a> |
       <a href="/categories/add">Add a Category</a> |
       <a href="/recipes">View all Recipes</a> |

@@ -135,5 +135,36 @@ namespace RecipeBox
       Assert.Equal(expectedResult, result);
     }
 
+    [Fact]
+    public void Test_RecipeEdit_EditsRecipeNameInstructions()
+    {
+      //Arrange
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      testRecipe.Save();
+      //Act
+      testRecipe.EditRecipe("Dark Chocolate Chip Cookies", instructions);
+      string expectedResult = "Dark Chocolate Chip Cookies";
+      string result = testRecipe.GetName();
+      //Assert
+      Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void Test_RemoveCategoryFromRecipe()
+    {
+      //Arrange
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      testRecipe.Save();
+      Category testCategory = new Category("Desserts");
+      testCategory.Save();
+      testRecipe.AddCategory(testCategory.GetId());
+      testRecipe.RemoveCategory(testCategory.GetId());
+      List<Category> expectedResult = new List<Category>{};
+      //Act
+      List<Category> result = testRecipe.GetCategories();
+      //Assert
+      Assert.Equal(expectedResult, result);
+    }
+
   }
 }

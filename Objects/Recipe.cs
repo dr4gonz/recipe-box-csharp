@@ -187,7 +187,7 @@ namespace RecipeBox
       return foundRecipe;
     }
 
-    public void AddCategory(int id)
+    public void AddCategory(int categoryId)
     {
       SqlConnection conn = DB.Connection();
       conn.Open();
@@ -201,7 +201,32 @@ namespace RecipeBox
 
       SqlParameter categoryIdParameter = new SqlParameter();
       categoryIdParameter.ParameterName = "@CategoryId";
-      categoryIdParameter.Value = id;
+      categoryIdParameter.Value = categoryId;
+      cmd.Parameters.Add(categoryIdParameter);
+
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+
+    public void RemoveCategory(int categoryId)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("DELETE FROM recipes_categories WHERE category_id=@CategoryId AND recipe_id=@RecipeId;", conn);
+
+      SqlParameter recipeIdParameter = new SqlParameter();
+      recipeIdParameter.ParameterName = "@RecipeId";
+      recipeIdParameter.Value = this._id;
+      cmd.Parameters.Add(recipeIdParameter);
+
+      SqlParameter categoryIdParameter = new SqlParameter();
+      categoryIdParameter.ParameterName = "@CategoryId";
+      categoryIdParameter.Value = categoryId;
       cmd.Parameters.Add(categoryIdParameter);
 
       cmd.ExecuteNonQuery();
@@ -247,7 +272,7 @@ namespace RecipeBox
       SqlConnection conn = DB.Connection();
       conn.Open();
       SqlDataReader rdr = null;
-      SqlCommand cmd = new SqlCommand("SELECT * FROM categories;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT * FROM categories WHERE categories.id NOT IN(SELECT categories.id FROM categories INNER JOIN recipes_categories ON (recipes_categories.category_id = categories.id) WHERE recipes_categories.recipe_id = @RecipeId);", conn);
 
       SqlParameter recipeIdParameter = new SqlParameter();
       recipeIdParameter.ParameterName = "@RecipeId";
@@ -268,6 +293,38 @@ namespace RecipeBox
       if (conn != null) conn.Close();
 
       return categories;
+    }
+
+    public void EditRecipe(string newName, string newInstructions)
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("UPDATE recipes SET name = @NewName, instructions = @NewInstructions OUTPUT INSERTED.name, INSERTED.instructions WHERE id = @RecipeId;", conn);
+      SqlParameter recipeIdParameter = new SqlParameter();
+      recipeIdParameter.ParameterName = "@RecipeId";
+      recipeIdParameter.Value = this._id;
+      cmd.Parameters.Add(recipeIdParameter);
+
+      SqlParameter recipeNameParameter = new SqlParameter();
+      recipeNameParameter.ParameterName = "@NewName";
+      recipeNameParameter.Value = newName;
+      cmd.Parameters.Add(recipeNameParameter);
+
+      SqlParameter recipeInstructionsParameter = new SqlParameter();
+      recipeInstructionsParameter.ParameterName = "@NewInstructions";
+      recipeInstructionsParameter.Value = newInstructions;
+      cmd.Parameters.Add(recipeInstructionsParameter);
+
+      rdr = cmd.ExecuteReader();
+      while(rdr.Read())
+      {
+        _name = rdr.GetString(0);
+        _instructions = rdr.GetString(1);
+      }
+      if(rdr != null) rdr.Close();
+      if(conn != null) conn.Close();
     }
   }
 }

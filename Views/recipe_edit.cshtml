@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <title>Edit Recipe</title>
+  </head>
+  <body>
+    <div class="container">
+      <form class="form-group" action="/recipes/@Model.GetId()" method="POST">
+        <input type="hidden" name="_method" value="PATCH">
+        <label for="recipe-title">Title</label>
+        <input type="text" name="recipe-title" value="@Model.GetName()" required>
+        <label for="instructions">Instructions</label>
+        <input type="text" name="instructions" value="@Model.GetInstructions()" required>
+        <button type="submit" name="button">Submit</button>
+      </form>
+      @foreach(var category in Model.GetCategories())
+        {
+          <a href="/categories/@category.GetId()">@category.GetName()</a>
+          <form action="/recipes/update/@Model.GetId()" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="category-id" value="@category.GetId()">
+            <button type="submit" name="button"> - Remove Category</button>
+          </form>
+        }
+      <a href="/recipes">View all Recipes</a> |
+      <a href="/categories">View all Categories</a>
+    </div>
+  </body>
+</html>
