@@ -85,5 +85,21 @@ namespace RecipeBox
       Assert.Equal(0, allCategorys.Count);
     }
 
+    [Fact]
+    public void Test_GetRecipes_GetsRecipesForACategory()
+    {
+      //Arrange
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      testRecipe.Save();
+      Category testCategory = new Category("Desserts");
+      testCategory.Save();
+      List<Recipe> expectedResult = new List<Recipe>{testRecipe};
+      //Act
+      testRecipe.AddCategory(testCategory.GetId());
+      List<Recipe> result = testCategory.GetRecipes();
+      //Assert
+      Assert.Equal(expectedResult, result);
+    }
+
   }
 }

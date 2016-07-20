@@ -162,5 +162,35 @@ namespace RecipeBox
       }
       return foundCategory;
     }
+
+    public List<Recipe> GetRecipes()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+      SqlDataReader rdr = null;
+      SqlCommand cmd = new SqlCommand("SELECT recipes.* FROM categories JOIN recipes_categories ON (categories.id = recipes_categories.category_id) JOIN recipes ON (recipes.id = recipes_categories.recipe_id) WHERE categories.id = @CategoryId", conn);
+
+      SqlParameter categoryIdParameter = new SqlParameter();
+      categoryIdParameter.ParameterName = "@CategoryId";
+      categoryIdParameter.Value = this._id;
+      cmd.Parameters.Add(categoryIdParameter);
+
+      List<Recipe> recipes = new List<Recipe>{};
+      rdr = cmd.ExecuteReader();
+      List<Ingredient> ingredients = new List<Ingredient> {};
+      while(rdr.Read())
+      {
+        int recipeId = rdr.GetInt32(0);
+        string recipeName = rdr.GetString(1);
+        string recipeInstructions = rdr.GetString(2);
+        Recipe newRecipe = new Recipe(recipeName, recipeInstructions, ingredients, recipeId);
+        recipes.Add(newRecipe);
+      }
+
+      if (rdr != null) rdr.Close();
+      if (conn != null) conn.Close();
+
+      return recipes;
+    }
   }
 }
