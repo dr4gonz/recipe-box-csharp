@@ -61,6 +61,12 @@ namespace RecipeBox
         List<Category> allCategories = Category.GetAll();
         return View["categories.cshtml", allCategories];
       };
+      Post["/recipes/{id}/add-category"] = parameters =>
+      {
+        Recipe recipe = Recipe.Find(parameters.id);
+        recipe.AddCategory(Request.Form["category"]);
+        return View["recipe.cshtml", recipe];
+      };
     }
   }
 }

@@ -242,11 +242,12 @@ namespace RecipeBox
 
     public List<Category> GetAvailableCategories()
     {
+      List<Category> usedCategories = this.GetCategories();
+
       SqlConnection conn = DB.Connection();
       conn.Open();
       SqlDataReader rdr = null;
-      SqlCommand cmd = new SqlCommand("SELECT * FROM categories WHERE NOT EXISTS (SELECT * FROM recipes_categories JOIN categories ON (categories.id = recipes_categories.category_id) WHERE recipes_categories.recipe_id = @RecipeId);", conn);
-      // SqlCommand cmd = new SqlCommand("SELECT * FROM categories JOIN recipes_categories ON (recipes_categories.category_id = categories.id) WHERE recipes_categories.recipe_id = @RecipeId", conn);
+      SqlCommand cmd = new SqlCommand("SELECT * FROM categories;", conn);
 
       SqlParameter recipeIdParameter = new SqlParameter();
       recipeIdParameter.ParameterName = "@RecipeId";
@@ -260,7 +261,7 @@ namespace RecipeBox
         int categoryId = rdr.GetInt32(0);
         string categoryName = rdr.GetString(1);
         Category newCategory = new Category(categoryName, categoryId);
-        categories.Add(newCategory);
+        if (!usedCategories.Contains(newCategory)) categories.Add(newCategory);
       }
 
       if (rdr != null) rdr.Close();

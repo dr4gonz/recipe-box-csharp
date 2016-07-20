@@ -16,7 +16,7 @@
           <a href="/categories/@category.GetId()">@category.GetName()</a>
         }
       </p>
-      <form action="/recipes/{id}/add-category" method="post">
+      <form action="/recipes/@Model.GetId()/add-category" method="post">
         <select name="category">
           @foreach (var category in Model.GetAvailableCategories())
           {
