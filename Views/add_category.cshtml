@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <title>Add Category</title>
+  </head>
+  <body>
+    <div class="container">
+      <form class="form-group" action="/categories/add" method="POST">
+        <label for="category-title">Category</label>
+        <input type="text" name="category-title" required>
+        <button type="submit" name="button">Submit</button>
+      </form>
+      <a href="/recipes">View all Recipes</a> |
+      <a href="/categories">View all Categories</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <title></title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>@Model.GetName()</h1>
+      <h2>Instructions: </h2>
+      <p>@Model.GetInstructions()</p>
+      <br>
+      <p>@foreach(var category in Model.GetCategories())
+        {
+          <a href="/categories/@category.GetId()">@category.GetName()</a>
+        }
+      </p>
+      <form action="/recipes/{id}/add-category" method="post">
+        <select name="category">
+          @foreach (var category in Model.GetAvailableCategories())
+          {
+            <option value="@category.GetId()">@category.GetName()</option>
+          }
+        </select>
+        <button type="submit" name="button">Add Category</button>
+      </form>
+      <form action="/recipes/@Model.GetId()/delete" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit" name="button">Delete This Recipe</button>
+      </form>
+      <a href="/recipes/add">Add a Recipe</a> |
+      <a href="/categories/add">Add a Category</a> |
+      <a href="/recipes">View all Recipes</a> |
+      <a href="/categories">View all Categories</a>
+    </div>
+  </body>
+</html>

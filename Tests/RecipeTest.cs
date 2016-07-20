@@ -102,5 +102,38 @@ namespace RecipeBox
       Assert.Equal(expectedResult, result);
     }
 
+    [Fact]
+    public void Test_RecipeHasOneCategory_GetAvailableCategories()
+    {
+      //Arrange
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      testRecipe.Save();
+      Category firstCategory = new Category("Desserts");
+      firstCategory.Save();
+      Category secondCategory = new Category("Baking");
+      secondCategory.Save();
+      List<Category> expectedResult = new List<Category>{firstCategory};
+      //Act
+      testRecipe.AddCategory(secondCategory.GetId());
+      List<Category> result = testRecipe.GetAvailableCategories();
+      //Assert
+      Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void Test_RecipeHasNoCategory_GetAvailableCategories()
+    {
+      //Arrange
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      testRecipe.Save();
+      Category testCategory = new Category("Desserts");
+      testCategory.Save();
+      List<Category> expectedResult = new List<Category>{testCategory};
+      //Act
+      List<Category> result = testRecipe.GetAvailableCategories();
+      //Assert
+      Assert.Equal(expectedResult, result);
+    }
+
   }
 }
