@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Xml.Serialization;
+using System.Xml;
 
 namespace RecipeBox
 {
@@ -11,6 +13,7 @@ namespace RecipeBox
     private List<Ingredient> ingredients = new List<Ingredient> {};
     private string recipeName = "chocolate chip cookies";
     private string instructions = "1. Mix Ingredients. 2. Bake for 15 minutes";
+    private List<string> ingredientQuantities = new List<string> {"Flour - 1 cup"};
     public void Dispose()
 
     {
@@ -164,6 +167,14 @@ namespace RecipeBox
       List<Category> result = testRecipe.GetCategories();
       //Assert
       Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void Test_XMLSerialize_SerializesIngredients()
+    {
+      string xmlString = SerializableList.GetXMLFromObject(ingredientQuantities);
+      List<string> convertedXML = SerializableList.ObjectToXML(xmlString, List<string>);
+      Assert.Equal(ingredientQuantities, convertedXML);
     }
 
   }

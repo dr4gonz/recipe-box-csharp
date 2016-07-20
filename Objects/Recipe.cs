@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System;
-
 namespace RecipeBox
 {
   public class Recipe
@@ -326,5 +325,6 @@ namespace RecipeBox
       if(rdr != null) rdr.Close();
       if(conn != null) conn.Close();
     }
+
   }
 }
