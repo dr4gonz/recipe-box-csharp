@@ -15,6 +15,7 @@ namespace RecipeBox
 
     {
       Recipe.DeleteAll();
+      Category.DeleteAll();
     }
 
     public RecipeTest()
@@ -83,6 +84,22 @@ namespace RecipeBox
 
       //Assert
       Assert.Equal(0, allRecipes.Count);
+    }
+
+    [Fact]
+    public void Test_AddCategoryToRecipe()
+    {
+      //Arrange
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      testRecipe.Save();
+      Category testCategory = new Category("Desserts");
+      testCategory.Save();
+      List<Category> expectedResult = new List<Category>{testCategory};
+      //Act
+      testRecipe.AddCategory(testCategory.GetId());
+      List<Category> result = testRecipe.GetCategories();
+      //Assert
+      Assert.Equal(expectedResult, result);
     }
 
   }
