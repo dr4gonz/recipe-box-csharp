@@ -50,7 +50,7 @@ namespace RecipeBox
       Post["/recipes/add"] = _ =>
       {
         List<Ingredient> ingredients = new List<Ingredient>{};
-        Recipe newRecipe = new Recipe(Request.Form["recipe-title"], Request.Form["instructions"], ingredients);
+        Recipe newRecipe = new Recipe(Request.Form["recipe-title"], Request.Form["instructions"], ingredients, 0);
         newRecipe.Save();
         return View["recipe.cshtml", newRecipe];
       };
@@ -79,7 +79,7 @@ namespace RecipeBox
       };
       Patch["/recipes/{id}"] = parameters => {
         Recipe recipe = Recipe.Find(parameters.id);
-        recipe.EditRecipe(Request.Form["recipe-title"], Request.Form["instructions"]);
+        recipe.EditRecipe(Request.Form["recipe-title"], Request.Form["instructions"], Request.Form["rating"]);
         return View["recipe.cshtml", recipe];
       };
       Delete["/recipes/update/{id}"] = parameters =>

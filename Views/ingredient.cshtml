@@ -9,13 +9,13 @@
     <div class="container">
       <h1>@Model.GetName()</h1>
       <br>
-      <!-- Recipes:
+      Recipes:
 
-      <ul>foreach(var recipe in Model.GetRecipes())
+      <ul>@foreach(var recipe in Model.GetRecipes())
         {
-          <li><a href="/recipes/recipe.GetId()">recipe.GetName()</a></li>
+          <li><a href="/recipes/@recipe.GetId()">@recipe.GetName()</a></li>
         }
-      </ul> -->
+      </ul>
       <form action="/ingredients/@Model.GetId()/delete" method="post">
         <input type="hidden" name="_method" value="DELETE">
         <button type="submit" name="button">Delete This Ingredient</button>

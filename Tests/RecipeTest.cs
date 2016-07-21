@@ -38,8 +38,8 @@ namespace RecipeBox
     public void Test_EqualOverrideTrueForSameDescription()
     {
       //Arrange, Act
-      Recipe firstRecipe = new Recipe(recipeName, instructions, ingredients);
-      Recipe secondRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe firstRecipe = new Recipe(recipeName, instructions, ingredients, 5);
+      Recipe secondRecipe = new Recipe(recipeName, instructions, ingredients, 5);
 
       //Assert
       Assert.Equal(firstRecipe, secondRecipe);
@@ -49,7 +49,7 @@ namespace RecipeBox
     public void Test_Save()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
       //Act
       List<Recipe> result = Recipe.GetAll();
@@ -63,7 +63,7 @@ namespace RecipeBox
     public void Test_FindFindsRecipeInDatabase()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
 
       //Act
@@ -76,7 +76,7 @@ namespace RecipeBox
     [Fact]
     public void Test_DeleteDeletesRecipeFromDatabase()
     {
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
 
       //Act
@@ -91,7 +91,7 @@ namespace RecipeBox
     public void Test_AddCategoryToRecipe()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
       Category testCategory = new Category("Desserts");
       testCategory.Save();
@@ -107,7 +107,7 @@ namespace RecipeBox
     public void Test_RecipeHasOneCategory_GetAvailableCategories()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
       Category firstCategory = new Category("Desserts");
       firstCategory.Save();
@@ -125,7 +125,7 @@ namespace RecipeBox
     public void Test_RecipeHasNoCategory_GetAvailableCategories()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
       Category testCategory = new Category("Desserts");
       testCategory.Save();
@@ -140,10 +140,10 @@ namespace RecipeBox
     public void Test_RecipeEdit_EditsRecipeNameInstructions()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
       //Act
-      testRecipe.EditRecipe("Dark Chocolate Chip Cookies", instructions);
+      testRecipe.EditRecipe("Dark Chocolate Chip Cookies", instructions, 5);
       string expectedResult = "Dark Chocolate Chip Cookies";
       string result = testRecipe.GetName();
       //Assert
@@ -154,7 +154,7 @@ namespace RecipeBox
     public void Test_RemoveCategoryFromRecipe()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
       Category testCategory = new Category("Desserts");
       testCategory.Save();
@@ -171,7 +171,7 @@ namespace RecipeBox
     public void Test_AddIngredientToRecipe()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
       Ingredient testIngredient = new Ingredient("Flour");
       testIngredient.Save();
@@ -187,7 +187,7 @@ namespace RecipeBox
     public void Test_RemoveIngredientFromRecipe()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
       Ingredient testIngredient = new Ingredient("Flour");
       testIngredient.Save();
@@ -204,7 +204,7 @@ namespace RecipeBox
     public void Test_RecipeHasOneIngredient_GetAvailableIngredients()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
       Ingredient firstIngredient = new Ingredient("Flour");
       firstIngredient.Save();
@@ -222,7 +222,7 @@ namespace RecipeBox
     public void Test_RecipeHasNoIngredient_GetAvailableIngredients()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
       Ingredient testIngredient = new Ingredient("Flour");
       testIngredient.Save();

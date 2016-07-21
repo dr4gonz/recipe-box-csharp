@@ -183,7 +183,8 @@ namespace RecipeBox
         int recipeId = rdr.GetInt32(0);
         string recipeName = rdr.GetString(1);
         string recipeInstructions = rdr.GetString(2);
-        Recipe newRecipe = new Recipe(recipeName, recipeInstructions, ingredients, recipeId);
+        int recipeRating = rdr.GetInt32(3);
+        Recipe newRecipe = new Recipe(recipeName, recipeInstructions, ingredients, recipeRating, recipeId);
         recipes.Add(newRecipe);
       }
 

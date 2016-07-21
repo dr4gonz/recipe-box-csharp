@@ -13,6 +13,15 @@
         <input type="text" name="recipe-title" value="@Model.GetName()" required>
         <label for="instructions">Instructions</label>
         <input type="text" name="instructions" value="@Model.GetInstructions()" required>
+        <label for="rating">Rating</label>
+        <select name="rating">
+          <option>0</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
         <button type="submit" name="button">Submit</button>
       </form>
       @foreach(var category in Model.GetCategories())

@@ -90,7 +90,7 @@ namespace RecipeBox
     public void Test_GetRecipes_GetsRecipesForAnIngredient()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
       Ingredient testIngredient = new Ingredient("Flour");
       testIngredient.Save();

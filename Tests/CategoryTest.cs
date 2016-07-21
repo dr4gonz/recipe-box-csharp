@@ -91,7 +91,7 @@ namespace RecipeBox
     public void Test_GetRecipes_GetsRecipesForACategory()
     {
       //Arrange
-      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients, 5);
       testRecipe.Save();
       Category testCategory = new Category("Desserts");
       testCategory.Save();
