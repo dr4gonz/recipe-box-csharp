@@ -233,6 +233,22 @@ namespace RecipeBox
       Assert.Equal(expectedResult, result);
     }
 
+    [Fact]
+    public void Test_GetAllWithArgument_ReturnsSortedList()
+    {
+      //Arrange
+      Recipe firstRecipe = new Recipe(recipeName, instructions, ingredients, 1);
+      Recipe secondRecipe = new Recipe(recipeName, instructions, ingredients, 5);
+      firstRecipe.Save();
+      secondRecipe.Save();
+      //Act
+      List<Recipe> result = Recipe.GetAll("rating DESC;");
+      List<Recipe> testList = new List<Recipe>{secondRecipe, firstRecipe};
+
+      //Assert
+      Assert.Equal(testList, result);
+    }
+
 
   }
 }

@@ -41,6 +41,10 @@ namespace RecipeBox
         List<Recipe> allRecipes = Recipe.GetAll();
         return View["recipes.cshtml", allRecipes];
       };
+      Post["/recipes/sort"] = _ => {
+        List<Recipe> allRecipes = Recipe.GetAll("rating DESC;");
+        return View["recipes.cshtml", allRecipes];
+      };
       Get["/recipes/{id}"] = parameters =>
       {
         Recipe newRecipe = Recipe.Find(parameters.id);
@@ -111,6 +115,13 @@ namespace RecipeBox
         ingredient.Delete();
         List<Ingredient> allIngredients = Ingredient.GetAll();
         return View["ingredients.cshtml", allIngredients];
+      };
+      Delete["/clear"] = _ =>
+      {
+        Ingredient.DeleteAll();
+        Recipe.DeleteAll();
+        Category.DeleteAll();
+        return View["index.cshtml"];
       };
 
     }

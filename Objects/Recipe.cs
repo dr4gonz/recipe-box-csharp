@@ -106,13 +106,20 @@ namespace RecipeBox
     }
 
 
-    public static List<Recipe> GetAll()
+    public static List<Recipe> GetAll(string sortBy = "name;")
     {
       SqlConnection conn = DB.Connection();
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT * FROM recipes;", conn);
+      string queryString = "SELECT * FROM recipes ORDER BY " + sortBy;
+      SqlCommand cmd = new SqlCommand(queryString, conn);
+
+      SqlParameter sortParam = new SqlParameter();
+      sortParam.ParameterName = "@SortParameter";
+      sortParam.Value = sortBy;
+      cmd.Parameters.Add(sortParam);
+
       rdr = cmd.ExecuteReader();
 
       List<Recipe> allRecipes = new List<Recipe>{};
@@ -472,5 +479,35 @@ namespace RecipeBox
       return ingredients;
     }
 
+    public static List<Recipe> GetAllByRating()
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+      SqlCommand cmd = new SqlCommand("SELECT * FROM recipes ORDER BY rating DESC;", conn);
+
+      rdr = cmd.ExecuteReader();
+
+      List<Recipe> allRecipes = new List<Recipe>{};
+      List<Ingredient> testList = new List<Ingredient>{};
+      while(rdr.Read())
+      {
+        int recipeId = rdr.GetInt32(0);
+        string recipeName = rdr.GetString(1);
+        string recipeInstructions = rdr.GetString(2);
+        int recipeRating = rdr.GetInt32(3);
+        Recipe newRecipe = new Recipe(recipeName, recipeInstructions, testList, recipeRating, recipeId);
+        allRecipes.Add(newRecipe);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return allRecipes;
+    }
   }
 }
