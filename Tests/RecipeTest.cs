@@ -173,11 +173,28 @@ namespace RecipeBox
       //Arrange
       Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
       testRecipe.Save();
-      Ingredient testIngredient = new Ingredient("Desserts");
+      Ingredient testIngredient = new Ingredient("Flour");
       testIngredient.Save();
       List<Ingredient> expectedResult = new List<Ingredient>{testIngredient};
       //Act
       testRecipe.AddIngredient(testIngredient.GetId());
+      List<Ingredient> result = testRecipe.GetIngredientsFromTable();
+      //Assert
+      Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void Test_RemoveIngredientFromRecipe()
+    {
+      //Arrange
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      testRecipe.Save();
+      Ingredient testIngredient = new Ingredient("Flour");
+      testIngredient.Save();
+      testRecipe.AddIngredient(testIngredient.GetId());
+      testRecipe.RemoveIngredient(testIngredient.GetId());
+      List<Ingredient> expectedResult = new List<Ingredient>{};
+      //Act
       List<Ingredient> result = testRecipe.GetIngredientsFromTable();
       //Assert
       Assert.Equal(expectedResult, result);

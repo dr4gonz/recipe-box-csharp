@@ -379,5 +379,30 @@ namespace RecipeBox
 
       return ingredients;
     }
+
+    public void RemoveIngredient(int ingredientId)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("DELETE FROM recipes_ingredients WHERE ingredient_id=@IngredientId AND recipe_id=@RecipeId;", conn);
+
+      SqlParameter recipeIdParameter = new SqlParameter();
+      recipeIdParameter.ParameterName = "@RecipeId";
+      recipeIdParameter.Value = this._id;
+      cmd.Parameters.Add(recipeIdParameter);
+
+      SqlParameter ingredientIdParameter = new SqlParameter();
+      ingredientIdParameter.ParameterName = "@IngredientId";
+      ingredientIdParameter.Value = ingredientId;
+      cmd.Parameters.Add(ingredientIdParameter);
+
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
   }
 }
