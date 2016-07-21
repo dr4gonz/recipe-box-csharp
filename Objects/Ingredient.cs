@@ -46,7 +46,7 @@ namespace RecipeBox
       {
         for (int i = 0; i < list1.Count; i++)
         {
-          if (list1[i] != list2[i]) return false;
+          if (!list1[i].Equals(list2[i])) return false;
         }
       }
       return true;
@@ -174,6 +174,38 @@ namespace RecipeBox
         conn.Close();
       }
       return foundIngredient;
+    }
+
+    public List<Recipe> GetRecipes()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+      SqlDataReader rdr = null;
+      SqlCommand cmd = new SqlCommand("SELECT recipes.* FROM ingredients JOIN recipes_ingredients ON (ingredients.id = recipes_ingredients.ingredient_id) JOIN recipes ON (recipes.id = recipes_ingredients.recipe_id) WHERE ingredients.id = @IngredientId", conn);
+
+      SqlParameter ingredientIdParameter = new SqlParameter();
+      ingredientIdParameter.ParameterName = "@IngredientId";
+      ingredientIdParameter.Value = this._id;
+      cmd.Parameters.Add(ingredientIdParameter);
+
+      List<Ingredient> ingredients = new List<Ingredient> {};
+      List<Recipe> recipes = new List<Recipe>{};
+      rdr = cmd.ExecuteReader();
+      while(rdr.Read())
+      {
+        int recipeId = rdr.GetInt32(0);
+        string recipeName = rdr.GetString(1);
+        string recipeInstructions = rdr.GetString(2);
+        Recipe newRecipe = new Recipe(recipeName, recipeInstructions, ingredients, recipeId);
+        newRecipe.GetIngredientsFromTable();
+        recipes.Add(newRecipe);
+      }
+
+
+      if (rdr != null) rdr.Close();
+      if (conn != null) conn.Close();
+
+      return recipes;
     }
   }
 }

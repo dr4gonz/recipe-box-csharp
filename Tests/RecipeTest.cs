@@ -200,5 +200,39 @@ namespace RecipeBox
       Assert.Equal(expectedResult, result);
     }
 
+    [Fact]
+    public void Test_RecipeHasOneIngredient_GetAvailableIngredients()
+    {
+      //Arrange
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      testRecipe.Save();
+      Ingredient firstIngredient = new Ingredient("Flour");
+      firstIngredient.Save();
+      Ingredient secondIngredient = new Ingredient("Sugar");
+      secondIngredient.Save();
+      List<Ingredient> expectedResult = new List<Ingredient>{firstIngredient};
+      //Act
+      testRecipe.AddIngredient(secondIngredient.GetId());
+      List<Ingredient> result = testRecipe.GetAvailableIngredients();
+      //Assert
+      Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void Test_RecipeHasNoIngredient_GetAvailableIngredients()
+    {
+      //Arrange
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      testRecipe.Save();
+      Ingredient testIngredient = new Ingredient("Flour");
+      testIngredient.Save();
+      List<Ingredient> expectedResult = new List<Ingredient>{testIngredient};
+      //Act
+      List<Ingredient> result = testRecipe.GetAvailableIngredients();
+      //Assert
+      Assert.Equal(expectedResult, result);
+    }
+
+
   }
 }

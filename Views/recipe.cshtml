@@ -28,6 +28,23 @@
           <button type="submit" name="button">Add Category</button>
         </form>
       }
+      <p>@foreach(var ingredient in Model.GetIngredientsFromTable())
+        {
+          <a href="/ingredients/@ingredient.GetId()">@ingredient.GetName()</a>
+        }
+      </p>
+      @if(Model.GetAvailableIngredients().Count != 0)
+      {
+        <form action="/recipes/@Model.GetId()/add-ingredient" method="post">
+          <select name="ingredient">
+            @foreach (var ingredient in Model.GetAvailableIngredients())
+            {
+              <option value="@ingredient.GetId()">@ingredient.GetName()</option>
+            }
+          </select>
+          <button type="submit" name="button">Add Ingredient</button>
+        </form>
+      }
       <form action="/recipes/@Model.GetId()/delete" method="post">
         <input type="hidden" name="_method" value="DELETE">
         <button type="submit" name="button">Delete This Recipe</button>

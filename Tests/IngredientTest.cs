@@ -15,6 +15,8 @@ namespace RecipeBox
     public void Dispose()
     {
       Ingredient.DeleteAll();
+      Recipe.DeleteAll();
+      Category.DeleteAll();
     }
 
     public IngredientTest()
@@ -83,22 +85,22 @@ namespace RecipeBox
       //Assert
       Assert.Equal(0, allIngredients.Count);
     }
-    //
-    // [Fact]
-    // public void Test_GetRecipes_GetsRecipesForAIngredient()
-    // {
-    //   //Arrange
-    //   Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
-    //   testRecipe.Save();
-    //   Ingredient testIngredient = new Ingredient("Flour");
-    //   testIngredient.Save();
-    //   List<Recipe> expectedResult = new List<Recipe>{testRecipe};
-    //   //Act
-    //   testRecipe.AddIngredient(testIngredient.GetId());
-    //   List<Recipe> result = testIngredient.GetRecipes();
-    //   //Assert
-    //   Assert.Equal(expectedResult, result);
-    // }
+
+    [Fact]
+    public void Test_GetRecipes_GetsRecipesForAnIngredient()
+    {
+      //Arrange
+      Recipe testRecipe = new Recipe(recipeName, instructions, ingredients);
+      testRecipe.Save();
+      Ingredient testIngredient = new Ingredient("Flour");
+      testIngredient.Save();
+      testRecipe.AddIngredient(testIngredient.GetId());
+      //Act
+      Recipe result = testIngredient.GetRecipes()[0];
+      //Assert
+      Assert.Equal(testRecipe, result);
+    }
+
 
   }
 }

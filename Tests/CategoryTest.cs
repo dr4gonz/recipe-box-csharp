@@ -15,6 +15,8 @@ namespace RecipeBox
 
     {
       Category.DeleteAll();
+      Recipe.DeleteAll();
+      Ingredient.DeleteAll();
     }
 
     public CategoryTest()

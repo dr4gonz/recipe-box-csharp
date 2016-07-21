@@ -53,11 +53,23 @@ namespace RecipeBox
       }
     }
 
+    public string WriteToString()
+    {
+      string result = _name +"\n";
+      result += _instructions + "\n";
+      result += _id + "\n";
+      foreach (Ingredient ingredient in _ingredients)
+      {
+        result += ingredient.GetName() +" - " +ingredient.GetId() +"\n";
+      }
+      return result;
+    }
+
     public static void DeleteAll()
     {
       SqlConnection conn = DB.Connection();
       conn.Open();
-      SqlCommand cmd = new SqlCommand("DELETE FROM recipes; DELETE FROM recipes_categories;", conn);
+      SqlCommand cmd = new SqlCommand("DELETE FROM recipes; DELETE FROM recipes_categories; DELETE FROM recipes_ingredients;", conn);
       cmd.ExecuteNonQuery();
 
       if (conn != null)
@@ -346,6 +358,9 @@ namespace RecipeBox
 
       cmd.ExecuteNonQuery();
 
+      Ingredient ingredient = Ingredient.Find(ingredientId);
+      this._ingredients.Add(ingredient);
+
       if (conn != null)
       {
         conn.Close();
@@ -372,6 +387,7 @@ namespace RecipeBox
         string ingredientName = rdr.GetString(1);
         Ingredient newIngredient = new Ingredient(ingredientName, ingredientId);
         ingredients.Add(newIngredient);
+        this._ingredients.Add(newIngredient);
       }
 
       if (rdr != null) rdr.Close();
@@ -404,5 +420,36 @@ namespace RecipeBox
         conn.Close();
       }
     }
+
+    public List<Ingredient> GetAvailableIngredients()
+    {
+      List<Ingredient> usedIngredients = this.GetIngredientsFromTable();
+
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+      SqlDataReader rdr = null;
+      SqlCommand cmd = new SqlCommand("SELECT * FROM ingredients WHERE ingredients.id NOT IN(SELECT ingredients.id FROM ingredients INNER JOIN recipes_ingredients ON (recipes_ingredients.ingredient_id = ingredients.id) WHERE recipes_ingredients.recipe_id = @RecipeId);", conn);
+
+      SqlParameter recipeIdParameter = new SqlParameter();
+      recipeIdParameter.ParameterName = "@RecipeId";
+      recipeIdParameter.Value = this._id;
+      cmd.Parameters.Add(recipeIdParameter);
+
+      List<Ingredient> ingredients = new List<Ingredient>{};
+      rdr = cmd.ExecuteReader();
+      while(rdr.Read())
+      {
+        int ingredientId = rdr.GetInt32(0);
+        string ingredientName = rdr.GetString(1);
+        Ingredient newIngredient = new Ingredient(ingredientName, ingredientId);
+        if (!usedIngredients.Contains(newIngredient)) ingredients.Add(newIngredient);
+      }
+
+      if (rdr != null) rdr.Close();
+      if (conn != null) conn.Close();
+
+      return ingredients;
+    }
+
   }
 }
