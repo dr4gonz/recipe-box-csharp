@@ -11,8 +11,8 @@ namespace RecipeBox
     private List<Ingredient> ingredients = new List<Ingredient> {};
     private string recipeName = "chocolate chip cookies";
     private string instructions = "1. Mix Ingredients. 2. Bake for 15 minutes";
-    public void Dispose()
 
+    public void Dispose()
     {
       Ingredient.DeleteAll();
     }
@@ -27,7 +27,6 @@ namespace RecipeBox
     {
       //Arrange, Act
       int result = Ingredient.GetAll().Count;
-
       //Assert
       Assert.Equal(0, result);
     }
@@ -84,7 +83,7 @@ namespace RecipeBox
       //Assert
       Assert.Equal(0, allIngredients.Count);
     }
-    // 
+    //
     // [Fact]
     // public void Test_GetRecipes_GetsRecipesForAIngredient()
     // {
