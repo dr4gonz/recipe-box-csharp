@@ -176,12 +176,13 @@ namespace RecipeBox
       return foundIngredient;
     }
 
-    public List<Recipe> GetRecipes()
+    public List<Recipe> GetRecipes(string sortBy = "name;")
     {
       SqlConnection conn = DB.Connection();
       conn.Open();
       SqlDataReader rdr = null;
-      SqlCommand cmd = new SqlCommand("SELECT recipes.* FROM ingredients JOIN recipes_ingredients ON (ingredients.id = recipes_ingredients.ingredient_id) JOIN recipes ON (recipes.id = recipes_ingredients.recipe_id) WHERE ingredients.id = @IngredientId", conn);
+      string queryString = "SELECT recipes.* FROM ingredients JOIN recipes_ingredients ON (ingredients.id = recipes_ingredients.ingredient_id) JOIN recipes ON (recipes.id = recipes_ingredients.recipe_id) WHERE ingredients.id = @IngredientId ORDER BY " + sortBy;
+      SqlCommand cmd = new SqlCommand(queryString, conn);
 
       SqlParameter ingredientIdParameter = new SqlParameter();
       ingredientIdParameter.ParameterName = "@IngredientId";

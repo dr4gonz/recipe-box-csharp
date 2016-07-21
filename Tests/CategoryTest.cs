@@ -103,5 +103,25 @@ namespace RecipeBox
       Assert.Equal(expectedResult, result);
     }
 
+    [Fact]
+    public void Test_GetAllWithArgument_ReturnsSortedList()
+    {
+      //Arrange
+      Recipe firstRecipe = new Recipe(recipeName, instructions, ingredients, 1);
+      Recipe secondRecipe = new Recipe(recipeName, instructions, ingredients, 5);
+      firstRecipe.Save();
+      secondRecipe.Save();
+      Category newCategory = new Category("baking");
+      newCategory.Save();
+      firstRecipe.AddCategory(newCategory.GetId());
+      secondRecipe.AddCategory(newCategory.GetId());
+      //Act
+      List<Recipe> result = newCategory.GetRecipes("rating DESC;");
+      List<Recipe> testList = new List<Recipe>{secondRecipe, firstRecipe};
+
+      //Assert
+      Assert.Equal(testList, result);
+    }
+
   }
 }
