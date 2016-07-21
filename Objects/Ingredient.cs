@@ -51,5 +51,129 @@ namespace RecipeBox
       }
       return true;
     }
+
+    public static void DeleteAll()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+      SqlCommand cmd = new SqlCommand("DELETE FROM ingredients; DELETE FROM recipes_ingredients;", conn);
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+
+    public void Delete()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("DELETE FROM ingredients WHERE id = @IngredientId;", conn);
+
+      SqlParameter ingredientIdParameter = new SqlParameter();
+      ingredientIdParameter.ParameterName = "@IngredientId";
+      ingredientIdParameter.Value = this.GetId();
+
+      cmd.Parameters.Add(ingredientIdParameter);
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+
+
+    public static List<Ingredient> GetAll()
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM ingredients;", conn);
+      rdr = cmd.ExecuteReader();
+
+      List<Ingredient> allIngredients = new List<Ingredient>{};
+      while(rdr.Read())
+      {
+        int ingredientId = rdr.GetInt32(0);
+        string ingredientName = rdr.GetString(1);
+        Ingredient newIngredient = new Ingredient(ingredientName, ingredientId);
+        allIngredients.Add(newIngredient);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return allIngredients;
+    }
+
+    public void Save()
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO ingredients (name) OUTPUT INSERTED.id VALUES (@IngredientName);", conn);
+
+      SqlParameter nameParameter = new SqlParameter();
+      nameParameter.ParameterName = "@IngredientName";
+      nameParameter.Value = this.GetName();
+      cmd.Parameters.Add(nameParameter);
+
+      rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this._id = rdr.GetInt32(0);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+
+    public static Ingredient Find(int id)
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM ingredients WHERE id = @IngredientId;", conn);
+      SqlParameter ingredientIdParameter = new SqlParameter();
+      ingredientIdParameter.ParameterName = "@IngredientId";
+      ingredientIdParameter.Value = id.ToString();
+      cmd.Parameters.Add(ingredientIdParameter);
+      rdr = cmd.ExecuteReader();
+
+      int foundIngredientId = 0;
+      string foundIngredientName = null;
+      while(rdr.Read())
+      {
+        foundIngredientId = rdr.GetInt32(0);
+        foundIngredientName = rdr.GetString(1);
+      }
+      Ingredient foundIngredient = new Ingredient(foundIngredientName, foundIngredientId);
+
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return foundIngredient;
+    }
   }
 }
